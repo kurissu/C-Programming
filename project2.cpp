@@ -13,10 +13,9 @@ public:
 	void setInitAmount(int);
 	void setYear(int);
 	int getYear();
-	int getInterestRate();
+	double getInterestRate();
 	int getInitialAmount();
-	int projectedSavings();
-    int power(int);
+	double projectedSavings(int);
 };
 /*IMPLEMENTATION SECTION*/
 SavingsAccount::SavingsAccount(int r, int n, int y):interestRate(r), initialAmount(n), year(y){}
@@ -30,8 +29,8 @@ void SavingsAccount::setInitAmount(int n){
 void SavingsAccount::setYear(int y){
 	year = y;
 }
-int SavingsAccount::getInterestRate(){
-	return double(interestRate/100);
+double SavingsAccount::getInterestRate(){
+	return interestRate/100.0;
 }
 int SavingsAccount::getInitialAmount(){
 	return initialAmount;
@@ -39,19 +38,12 @@ int SavingsAccount::getInitialAmount(){
 int SavingsAccount::getYear(){
 	return year;
 }
-int SavingsAccount::projectedSavings(){
-	int result = initialAmount;
-	if(year>=1)
-		getInitialAmount();
-	result = result*power(1+getInterestRate());
-    cout<<result<<endl;
-	return double(result);
-}
-int SavingsAccount::power(int n){
-	int result = n;
-	for(int i=1;i<year;i++)
-		result = result * n;
-return result;
+double SavingsAccount::projectedSavings(int y) {
+	double result;
+	if (y == 0)
+		return getInitialAmount();
+	return projectedSavings(y-1)+projectedSavings(y-1)*getInterestRate();
+
 }
 /*MAIN FUNCTION*/
 int main(){
@@ -62,8 +54,8 @@ int main(){
 	cin>>r;
     cout<<"Please enter the number of years: ";
     cin>>y;
-    SavingsAccount s(n,r,y);
-    cout<<"power is "<<s.power(2);
-    cout<<"Your total savings after "<< y << " years will be "<< s.projectedSavings() <<endl;
-return 0;
+    SavingsAccount s(r,n,y);
+    cout<<"Your total savings after "<< y << " years will be $"<< s.projectedSavings(y) <<endl;
+	system("pause");
+	return 0;
 }
